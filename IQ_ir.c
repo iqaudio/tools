@@ -6,7 +6,7 @@
 // IR inputs for KEY_VOLUMEUP and KEY_VOLUMEDOWN, also takes KEY_MUTE input also
 // Assumes IQAUDIO.COM Pi-DAC volume range -103dB to 4dB
 //
-// G.Garrity July 10th 2014 IQaudIO.com
+// G.Garrity August 9th 2014 IQaudIO.com
 //
 // Compile with 
 //	gcc IQ_ir.c -oIQ_ir -lwiringPi -lasound -llirc_client
