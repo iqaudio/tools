@@ -6,7 +6,7 @@
 // IR inputs for KEY_VOLUMEUP and KEY_VOLUMEDOWN, also takes KEY_MUTE input also
 // Assumes IQAUDIO.COM Pi-DAC volume range -103dB to 4dB
 //
-// G.Garrity August 9th 2014 IQaudIO.com
+// G.Garrity May 25th 2015 IQaudIO.com
 //
 // Compile with 
 //	gcc IQ_ir.c -oIQ_ir -lwiringPi -lasound -llirc_client
@@ -16,12 +16,12 @@
 #include <stdio.h>
 #include <wiringPi.h>
 #include <alsa/asoundlib.h>
+#include <alsa/mixer.h>
+#include <stdbool.h>
+#include <stdlib.h>
 
 #include <errno.h>
 #include <string.h>
-#include <lirc/lirc_client.h>
-#include <fcntl.h>
-
 /*
    IR Sensor onnections
    IRSensor	  - gpio 25   (IQAUDIO.COM PI-DAC 25)
@@ -55,9 +55,9 @@ int main(int argc, char * argv[])
    snd_mixer_selem_id_t *sid;
 
    const char *card = "default";
-   const char *selem_name = "Playback Digital";
+   const char *selem_name = "PCM";
    int x, mute_state;
-   long i, currentdBVolume;
+   long i, currentVolume;
 
    // IRSensor data
    struct lirc_config *config;
@@ -72,7 +72,7 @@ int main(int argc, char * argv[])
    int MUTESETTING = FALSE;
    int ival;
 
-   printf("IQaudIO.com Pi-DAC Volume Control support (IR) v1.2 August 9th 2014\n\n");
+   printf("IQaudIO.com Pi-DAC Volume Control support (IR) v1.3 May 25th 2015\n\n");
 
    buttonTimer = 0;
 
@@ -94,43 +94,21 @@ int main(int argc, char * argv[])
    snd_mixer_selem_get_playback_volume_range(elem, &min, &max);
    if (DEBUG_PRINT) printf("Returned card VOLUME range - min: %ld, max: %ld\n", min, max);
 
-   if (x = snd_mixer_selem_ask_playback_vol_dB (elem, (min+1), &db_of_i))
-   {
-               printf("%d %s\n", x, snd_strerror(x));
-   }
-   else if (DEBUG_PRINT) printf("min VOLUME value %d = %ld DB\n", min+1 , db_of_i);
-
-   if (x = snd_mixer_selem_ask_playback_vol_dB (elem, (max), &db_of_i))
-   {
-               printf("%d %s\n", x, snd_strerror(x));
-   }
-   else if (DEBUG_PRINT) printf("max VOLUME value %d = %ld DB\n", max , db_of_i);
-
-   snd_mixer_selem_get_playback_dB_range(elem, &mindb, &maxdb);
-   if (DEBUG_PRINT) printf("Returned card DB Range - mindb: %ld, maxdb: %ld\n", mindb, maxdb);
-
    // Minimum given is mute, we need the first real value
    min++;
 
-   // Set the midDB to correspond to the actual range
-   if (x = snd_mixer_selem_ask_playback_vol_dB (elem, min, &mindb))
-   {
-        printf("%d %s\n", x, snd_strerror(x));
-   }
-   else if (DEBUG_PRINT) printf("mindb changed to %ld DB\n", mindb);
-
    // Get current volume
-   if (x = snd_mixer_selem_get_playback_dB (elem, SND_MIXER_SCHN_FRONT_LEFT, &currentdBVolume))
+   if (x = snd_mixer_selem_get_playback_volume (elem, SND_MIXER_SCHN_FRONT_LEFT, &currentVolume))
    {
         printf("%d %s\n", x, snd_strerror(x));
    }
-   else if (DEBUG_PRINT) printf("Current ALSA volume LEFT: %ld dB\n", currentdBVolume);
+   else if (DEBUG_PRINT) printf("Current ALSA volume LEFT: %ld\n", currentVolume);
 
-   if (x = snd_mixer_selem_get_playback_dB (elem, SND_MIXER_SCHN_FRONT_RIGHT, &currentdBVolume))
+   if (x = snd_mixer_selem_get_playback_volume (elem, SND_MIXER_SCHN_FRONT_RIGHT, &currentVolume))
    {
         printf("%d %s\n", x, snd_strerror(x));
    }
-   else if (DEBUG_PRINT) printf("Current ALSA volume RIGHT: %ld dB\n", currentdBVolume);
+   else if (DEBUG_PRINT) printf("Current ALSA volume RIGHT: %ld\n", currentVolume);
 
    //Initiate LIRC. Exit on failure
    if (lirc_init("lirc",1) !=-1)
@@ -152,9 +130,9 @@ int main(int argc, char * argv[])
 				if (DEBUG_PRINT) printf(" Some IR signal received: %s\n",code);
 
                         	   // Check to see if the string "KEY_MUTE" appears anywhere within the string 'code'.
-	                           if(strstr (code,"KEY_MUTE"))
+	                           if(strstr (code,"KEY_PLAYPAUSE"))
 				   {
-                	                if (DEBUG_PRINT) printf("MATCH on KEY_MUTE\n");
+                	                if (DEBUG_PRINT) printf("MATCH on KEY_PLAYPAUSE\n");
                        	                // Call ALSA Here to toggle mute, need to do both LEFT and RIGHT channels
 					if (x = snd_mixer_selem_get_playback_switch(elem, SND_MIXER_SCHN_FRONT_LEFT, &ival))
 					{
@@ -185,18 +163,18 @@ int main(int argc, char * argv[])
 
                                         // Get current volume as it could have been changed in parallel outside of this code (alsamixer for example)
 					// NOT WORKING - Does not return "system" changes
-                                        if (x = snd_mixer_selem_get_playback_dB (elem, SND_MIXER_SCHN_FRONT_LEFT, &currentdBVolume))
+                                        if (x = snd_mixer_selem_get_playback_volume (elem, SND_MIXER_SCHN_FRONT_LEFT, &currentVolume))
                                         {
                                                 printf("%d %s\n", x, snd_strerror(x));
                                         }
-                                        else if (DEBUG_PRINT) printf("Volume read for ALSA LEFT: %ld dB\n", currentdBVolume);
+                                        else if (DEBUG_PRINT) printf("Volume read for ALSA LEFT: %ld\n", currentVolume);
 
 					// Make sure that we get back from MUTE state
-					if (currentdBVolume < mindb) currentdBVolume = mindb;
+					if (currentVolume < min) currentVolume = min;
 
-                		        currentdBVolume = currentdBVolume+100;
+                		        currentVolume = currentVolume+10;
                       			// Adjust for MAX volume
-                         		if (currentdBVolume > maxdb) currentdBVolume = maxdb;
+                         		if (currentVolume > max) currentVolume = max;
                                         buttonTimer = buttonTimer + 100;
                                    }
                                    else if(strstr (code,"KEY_VOLUMEDOWN"))
@@ -207,24 +185,24 @@ int main(int argc, char * argv[])
 
                                         // Get current volume as it could have been changed in parallel outside of this code (alsamixer for example)
 					// NOT WORKING - Does not return "system" changes
-                                        if (x = snd_mixer_selem_get_playback_dB (elem, SND_MIXER_SCHN_FRONT_LEFT, &currentdBVolume))
+                                        if (x = snd_mixer_selem_get_playback_volume (elem, SND_MIXER_SCHN_FRONT_LEFT, &currentVolume))
                                         {
                                                 printf("%d %s\n", x, snd_strerror(x));
                                         }
-                                        else if (DEBUG_PRINT) printf("Volume read for ALSA volume LEFT: %ld dB\n", currentdBVolume);
+                                        else if (DEBUG_PRINT) printf("Volume read for ALSA volume LEFT: %ld\n", currentVolume);
 
-                		        currentdBVolume = currentdBVolume-100;
+                		        currentVolume = currentVolume-10;
 
                       			// Adjust for MUTE
-                         		if (currentdBVolume < mindb) currentdBVolume = -99999;
+                         		if (currentVolume < min) currentVolume = 0;
                                         buttonTimer = buttonTimer + 100;
                                    }
 
 				   // Handle MUTE based on MUTESETTING
-	              		   if (x = snd_mixer_selem_set_playback_dB_all(elem, currentdBVolume, 0))
+	              		   if (x = snd_mixer_selem_set_playback_volume_all(elem, currentVolume))
         	      		   {
                 	     		printf(" ERROR %d %s\n", x, snd_strerror(x));
-              			   } else if (DEBUG_PRINT) printf(" Volume successfully set to %ld dB using ALSA!\n", currentdBVolume);
+              			   } else if (DEBUG_PRINT) printf(" Volume successfully set to %ld using ALSA!\n", currentVolume);
                 	} // No IR code received
 		} // while
    	} // IRVALID
