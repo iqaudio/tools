@@ -2,9 +2,9 @@
 // Makes use of WIRINGPI Library
 // USES Raspberry Pi GPIO 23 and 24.
 // Adjusts ALSA volume (based on Left channel value) up or down to correspond with rotary encoder direction
-// Assumes IQAUDIO.COM Pi-DAC volume range -103dB to 4dB
+// Assumes IQAUDIO.COM Pi-DAC volume range -103dB to 0dB
 //
-// G.Garrity Aug 9th 2014 IQaudIO.com
+// G.Garrity Aug 19th 2015 IQaudIO.com
 //
 // Compile with gcc IQ_rot.c -oIQ_rot -lwiringPi -lasound
 //
@@ -59,11 +59,12 @@ int main(int argc, char * argv[])
    const char *card = "default";
    // Previous linux driver's mixer name
    //   const char *selem_name = "Playback Digital";
-   const char *selem_name = "PCM"; //Master?
+   //	const char *selem_name = "PCM";
+   const char *selem_name = "Digital";
    int x, mute_state;
    long i, currentVolume;
 
-   printf("IQaudIO.com Pi-DAC Volume Control support Rotary Encoder) v1.3 Feb 8th 2015\n\n");
+   printf("IQaudIO.com Pi-DAC Volume Control support Rotary Encoder) v1.4 Aug 19th 2015\n\n");
 
    wiringPiSetup ();
 
