@@ -4,10 +4,12 @@
 // Adjusts ALSA volume (based on Left channel value) up or down to correspond with rotary encoder direction
 // Assumes IQAUDIO.COM Pi-DAC volume range -103dB to 0dB
 //
-// G.Garrity Aug 19th 2015 IQaudIO.com
+// G.Garrity Aug 30th 2015 IQaudIO.com
 //
 // Compile with gcc IQ_rot.c -oIQ_rot -lwiringPi -lasound
 //
+// Make sure you have the most upto date WiringPi installed on the Pi to be used.
+
 
 
 #include <stdio.h>
@@ -60,11 +62,11 @@ int main(int argc, char * argv[])
    // Previous linux driver's mixer name
    //   const char *selem_name = "Playback Digital";
    //	const char *selem_name = "PCM";
-   const char *selem_name = "Digital";
+   const char *selem_name = "Digital";	// Linux 4.1.6-v7+ #810
    int x, mute_state;
    long i, currentVolume;
 
-   printf("IQaudIO.com Pi-DAC Volume Control support Rotary Encoder) v1.4 Aug 19th 2015\n\n");
+   printf("IQaudIO.com Pi-DAC Volume Control support Rotary Encoder) v1.5 Aug 30th 2015\n\n");
 
    wiringPiSetup ();
 
