@@ -2,6 +2,7 @@
 // Also sets GPIO22 to unmute the AMP+ or DigiAMP+ if being used.
 //
 // G.Garrity Jan 2nd 2016 (C) IQaudio Limited
+// Edited 16th Oct 2016 to remove GPIO22 mute settings as this is now handled in the overlay itself.
 //
 // Compile with gcc IQSetupMix.c -oIQSetupMix -lasound
 //
@@ -37,7 +38,6 @@
 #define OUT 1
 #define LOW  0
 #define HIGH 1
-#define POUT 22  /* Pi-DigiAMP/AMP+ Mute control */
 
 // Needed for ALSA mixer settings
 #include <alsa/asoundlib.h>
@@ -161,7 +161,7 @@ GPIOWrite(int pin, int value)
 	return(0);
 }
 
-void GetMixerSetting(long volume)
+void SetMixerSetting(long volume)
 {
     long min, max, currentVolume;
     int x;
@@ -236,38 +236,7 @@ void GetMixerSetting(long volume)
 
 int main(int argc, char * argv[])
 {
-
-    printf("IQaudIO Set ALSA for 2vRMS / un-MUTE v1.1 Jan 2nd 2016\n\n");
-
-    GetMixerSetting(1);
-
-    // GPIO22 State -> Unmute at startup
-
-    // Enable GPIO pins
-    if (-1 == GPIOExport(POUT)) {
-	fprintf(stderr, "Failed to export gpio22 to unmute!\n");
-	return(-1);
-    }
-
-    // Set GPIO directions
-    if (-1 == GPIODirection(POUT, OUT)) {
-	fprintf(stderr, "Failed to open gpio22 for writing!\n");
-	return(-1);
-    }
-
-    // Write GPIO value
-    if (-1 == GPIOWrite(POUT, LOW)) {
-	fprintf(stderr, "Failed to set gpio22 low!\n");
-	return(-1);
-    }
-
-    // Speep 1/2 sec
-    usleep(500 * 1000);
-
-    // Write GPIO value
-    if (-1 == GPIOWrite(POUT, HIGH)) {
-	fprintf(stderr, "Failed to set gpio22 high!\n");
-	return(-1);
-    }
+    printf("IQaudIO Set PCM512x ALSA driver for 2vRMS v1.2 Oct 16th 2016\n\n");
+    SetMixerSetting(1);
 }
 
