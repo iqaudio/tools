@@ -6,6 +6,8 @@
 # Code taken from sample posted on the Foundation's forum
 # by paulv >> Fri Jun 28, 2013 2:58 pm
 # https://www.raspberrypi.org/forums/viewtopic.php?t=48455&p=379280
+# Should be initiated in /etc/rc.local with following line:
+# python /home/pi/tools/ButtonPress.py&
  
 
 from time import sleep
