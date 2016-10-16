@@ -4,7 +4,7 @@
 # than 1sec but (less than 5) it will force a reboot.
 # If pressed for more than 5 seconds it will force a shutdown
 # Code taken from sample posted on the Foundation's forum
-# by paulv » Fri Jun 28, 2013 2:58 pm
+# by paulv >> Fri Jun 28, 2013 2:58 pm
 # https://www.raspberrypi.org/forums/viewtopic.php?t=48455&p=379280
  
 
