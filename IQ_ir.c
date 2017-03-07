@@ -55,7 +55,7 @@ int main(int argc, char * argv[])
    snd_mixer_selem_id_t *sid;
 
    const char *card = "default";
-   const char *selem_name = "PCM";
+   const char *selem_name = "Digital";
    int x, mute_state;
    long i, currentVolume;
 
@@ -72,7 +72,7 @@ int main(int argc, char * argv[])
    int MUTESETTING = IQFALSE;
    int ival;
 
-   printf("IQaudIO.com Pi-DAC Volume Control support (IR) v1.3 May 25th 2015\n\n");
+   printf("IQaudIO.com Pi-DAC Volume Control support (IR) v1.4 March 7th 2016\n\n");
 
    buttonTimer = 0;
 
