@@ -33,8 +33,8 @@
 */
 
 
-#define TRUE    1
-#define FALSE   0
+#define IQTRUE    1
+#define IQFALSE   0
 
 // Define DEBUG_PRINT TRUE for output
 #define DEBUG_PRINT 0
@@ -68,8 +68,8 @@ int main(int argc, char * argv[])
    //Timer for our buttons
    char *code;
    char *c;
-   int IRVALID = TRUE;
-   int MUTESETTING = FALSE;
+   int IRVALID = IQTRUE;
+   int MUTESETTING = IQFALSE;
    int ival;
 
    printf("IQaudIO.com Pi-DAC Volume Control support (IR) v1.3 May 25th 2015\n\n");
@@ -114,7 +114,7 @@ int main(int argc, char * argv[])
    if (lirc_init("lirc",1) !=-1)
    {
 	//Read the default LIRC config at /etc/lirc/lircd.conf  This is the config for your remote.
- 	if (lirc_readconfig(NULL,&config,NULL) !=0) IRVALID = FALSE;
+ 	if (lirc_readconfig(NULL,&config,NULL) !=0) IRVALID = IQFALSE;
 
 	if (IRVALID)
    	{
