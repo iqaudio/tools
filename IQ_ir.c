@@ -162,7 +162,7 @@ int main(int argc, char * argv[])
 		                        if (DEBUG_PRINT) printf("Volume UP\n");
 
                                         // Get current volume as it could have been changed in parallel outside of this code (alsamixer for example)
-					// NOT WORKING - Does not return "system" changes
+					snd_mixer_handle_events(handle); //handle external events such that volume is correct
                                         if (x = snd_mixer_selem_get_playback_volume (elem, SND_MIXER_SCHN_FRONT_LEFT, &currentVolume))
                                         {
                                                 printf("%d %s\n", x, snd_strerror(x));
@@ -184,7 +184,7 @@ int main(int argc, char * argv[])
 		                        if (DEBUG_PRINT) printf("Volume DOWN\n");
 
                                         // Get current volume as it could have been changed in parallel outside of this code (alsamixer for example)
-					// NOT WORKING - Does not return "system" changes
+					snd_mixer_handle_events(handle); //handle external events such that volume is correct
                                         if (x = snd_mixer_selem_get_playback_volume (elem, SND_MIXER_SCHN_FRONT_LEFT, &currentVolume))
                                         {
                                                 printf("%d %s\n", x, snd_strerror(x));
