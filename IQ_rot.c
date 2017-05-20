@@ -119,6 +119,7 @@ int main(int argc, char * argv[])
    {
       if (encoderPos != pos)
       {
+	      snd_mixer_handle_events(handle); //handle external events such that volume is correct
               // get current volume
 	      if (x = snd_mixer_selem_get_playback_volume (elem, SND_MIXER_SCHN_FRONT_LEFT, &currentVolume))
               {
