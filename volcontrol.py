@@ -1,7 +1,8 @@
 #!/usr/bin/python
 #
 # $Id: VolControl.py,v 1.10 2017/03/04 14:43:38 ian Exp $
-#
+# (C) Copyright IQaudIO Limited, 2017
+
 # Adjust ALSA volume by means of rotary encoder
 # also incorporates press-switch
 #   click = toggle mute
