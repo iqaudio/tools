@@ -5,11 +5,11 @@ IQaudIO useful tools / sample code etc.
 Compilation instructions are in each file's header.
 
 Precompiled versions also included.
-to run 
+to run
 
 $ sudo IQ_ir&
 
-or 
+or
 
 $ sudo IQ_rot&
 
