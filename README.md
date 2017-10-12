@@ -15,7 +15,9 @@ To check that utilities that change volume are working as expected please open a
 
 Adjusts ALSA volume (based on Left channel value) up or down to correspond with rotary encoder direction.
 
-    $ sudo IQ_rot &
+```
+$ sudo IQ_rot &
+```
 
 ### IQ_ir - IR Volume control Sample app
 
@@ -23,7 +25,9 @@ Adjusts ALSA volume (based on Left channel value) up or down to correspond with 
 - assumes IQAUDIO.COM Pi-DAC volume range -103dB to 4dB
 - USES Raspberry Pi GPIO 25
 
-    $ sudo IQ_ir &
+```
+$ sudo IQ_ir &
+```
 
 ### volcontrol.py - Rotary encoder/[reboot/halt] button
 
