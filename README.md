@@ -41,12 +41,6 @@ Supports 3 additional press buttons
 Supports 3 additional LEDs (by default pressing one of the 3 button's iluminates that button's LED)
 
 
-### volcontrol.py - Rotary encoder/[reboot/halt] button
-
-Adjust ALSA volume by means of rotary encoder
-also incorporates press-switch
--  click = toggle mute
--  hold = shutdown machine
 
 ### ButtonPress.py - Reboot/halt button
 
