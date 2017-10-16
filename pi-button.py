@@ -28,7 +28,7 @@ import RPi.GPIO as GPIO
 # 3=extreme, 2=verbose, 1=standard, 0=none
 debug = 2
 
-# set to 1 for unique LED (only one lit at any time)
+# set to 1 for unique LED (only one lit at any time). Yet to be implemented
 unique_led = 0
 
 # pins in use
@@ -47,7 +47,7 @@ newled3 = 16
 # control pin - defined in hardware so do not change
 mutepin = 22
 
-# control name in amixer
+# control name in amixer. IQaudIO Master volume control
 control='Digital'
 
 # volume change per encoder detent step in percent
@@ -76,7 +76,7 @@ buttonloopwait = 0.02  # seconds, recommend 0.02
 
 ###########################################################
 
-if debug : print "\nVolControl initialising"
+if debug : print "\nIQaudIO Pi-Button script initialising"
 
 # initialise hardware
 #   all get onboard pullup (approx 50k)
@@ -143,6 +143,7 @@ def pushbutton_callback(channel):
 
     if (pressduration>(float(holdtimeoff))):
         if debug : print ('Sytem shutdown due to button hold')
+# Uncomment line below for shutdown to be supported.            
 #        subprocess.call(['shutdown -h now "System halted by volume control" &'], shell=True)
     else:    
         if ( (pressduration>(float(switchdebounce)/1000.0)) and (pressduration<float(holdtimemute)) ):
@@ -239,7 +240,7 @@ GPIO.add_event_detect(newbutton3, GPIO.FALLING, callback=newbutton3_callback, bo
 
 # main code loop - we look out for changes in encoder position and
 # update volume control accordingly
-if debug : print "VolControl running"
+if debug : print "IQaudIO Pi-Button script running"
 
 mln=0
 try:
@@ -258,11 +259,12 @@ try:
                 v = str(volumestepsize)+'%-'
 
             # implement step size, eitehr with or without report to user
+            # Uncomment below to adjust volume control.
 #            if (debug>1):
- #               call(["/usr/bin/amixer", volumemapping, "set", control, v])
+#               call(["/usr/bin/amixer", volumemapping, "set", control, v])
 
- #           else:
- #               call(["/usr/bin/amixer", "-q", volumemapping, "set", control, v])
+#            else:
+#               call(["/usr/bin/amixer", "-q", volumemapping, "set", control, v])
                     
             lastencodercount=encodercount
 
@@ -272,5 +274,5 @@ except KeyboardInterrupt:
     pass
     
 # clean up after keyboard interrup
-if debug : print "\nVolControl exiting"
+if debug : print "\nIQaudIO Pi-Button script exiting"
 GPIO.cleanup()
