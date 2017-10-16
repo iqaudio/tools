@@ -54,10 +54,10 @@ control='Digital'
 # this can be non-integer, but it is then not completely regular
 volumestepsize = 3      # percent of full span
 
-# volume mapping
+# volume mapping - not implemented
 # set to '-M' for alsamixer-like mapping
 # set to '-R' for raw percentage volume
-volumemapping = '-M'    # must be '-M' or '-R'
+# volumemapping = ''    # must be '-M' or '-R'
 
 # guard times for poweroff function (seconds)
 holdtimemute = 4        # amp mutes after switch held this long
@@ -154,6 +154,13 @@ def pushbutton_callback(channel):
                 GPIO.output(mutepin,1)
             else:
                 GPIO.output(mutepin,0)
+
+            if (debug>1):
+               call(["/usr/bin/amixer", "sset", control, "toggle"])
+
+            else:
+               call(["/usr/bin/amixer", "-q", "sset", control, "toggle"])
+
 
 
 def newbutton1_callback(channel):
@@ -260,11 +267,11 @@ try:
 
             # implement step size, eitehr with or without report to user
             # Uncomment below to adjust volume control.
-#            if (debug>1):
-#               call(["/usr/bin/amixer", volumemapping, "set", control, v])
+            if (debug>1):
+               call(["/usr/bin/amixer", "sset", control, v])
 
-#            else:
-#               call(["/usr/bin/amixer", "-q", volumemapping, "set", control, v])
+            else:
+               call(["/usr/bin/amixer", "-q", "sset", control, v])
                     
             lastencodercount=encodercount
 
