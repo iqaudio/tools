@@ -29,6 +29,18 @@ Adjusts ALSA volume (based on Left channel value) up or down to correspond with 
 $ sudo IQ_ir &
 ```
 
+### pi-button.py - Support script for the IQaudIO Pi-Button board.
+
+Adjust ALSA volume by means of rotary encoder
+
+Control system via rotary encoder button press
+- click -> toggle mute state
+- hold  -> shutdown the pi
+
+Supports 3 additional press buttons
+Supports 3 additional LEDs (by default pressing one of the 3 button's iluminates that button's LED)
+
+
 ### volcontrol.py - Rotary encoder/[reboot/halt] button
 
 Adjust ALSA volume by means of rotary encoder
