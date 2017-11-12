@@ -1,20 +1,18 @@
 #!/usr/bin/python
 #
-# $Id: pi-button.py,v 1.0 2017/10/15 17:53:00 Gordon Exp $
+# $Id: cosmiccontroller.py,v 1.0 2017/10/15 17:53:00 Gordon Exp $
 # (C) Copyright IQaudIO Limited, 2017
 
-# Use this code to read from the Pi-Button's buttons (1/2/3 and rotary encoder)
-# toggle the Pi-Button's LEDs (default it at button press)
+# Use this code to read from the CosmicController's buttons (1/2/3 and rotary encoder)
+# toggle the CosmicController's LEDs (default it at button press)
 # and adjust ALSA volume by means of rotary encoder
 # NOTE: Rotary encoder's button is time sensitive...
 #   click = toggle mute
-#   hold 4 seconds = mutes DigiAMP+
-#   hole 6 seconds = shutdown machine
 #
 # hardware:
-#   IQaudIO Pi-Button board v1
+#   IQaudIO CosmicController board v1
 #   rotary encoder with common tied to earth
-#   momentary switch with one termianl tied to earth
+#   momentary switch with one terminal tied to earth
 #   all input will use raspberry internal pullups
 
 
@@ -76,7 +74,7 @@ buttonloopwait = 0.02  # seconds, recommend 0.02
 
 ###########################################################
 
-if debug : print "\nIQaudIO Pi-Button script initialising"
+if debug : print "\nIQaudIO Cosmic Controller script initialising"
 
 # initialise hardware
 #   all get onboard pullup (approx 50k)
@@ -247,7 +245,7 @@ GPIO.add_event_detect(newbutton3, GPIO.FALLING, callback=newbutton3_callback, bo
 
 # main code loop - we look out for changes in encoder position and
 # update volume control accordingly
-if debug : print "IQaudIO Pi-Button script running"
+if debug : print "IQaudIO Cosmic Controller script running"
 
 mln=0
 try:
@@ -281,5 +279,5 @@ except KeyboardInterrupt:
     pass
     
 # clean up after keyboard interrup
-if debug : print "\nIQaudIO Pi-Button script exiting"
+if debug : print "\nIQaudIO Cosmic Controller script exiting"
 GPIO.cleanup()
