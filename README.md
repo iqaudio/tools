@@ -29,7 +29,7 @@ Adjusts ALSA volume (based on Left channel value) up or down to correspond with 
 $ sudo IQ_ir &
 ```
 
-### pi-button.py - Support script for the IQaudIO Pi-Button board.
+### cosmiccontroller.py - Support script for the IQaudIO Pi-CosmicController board.
 
 Adjust ALSA volume by means of rotary encoder
 
@@ -40,6 +40,7 @@ Control system via rotary encoder button press
 Supports 3 additional press buttons
 Supports 3 additional LEDs (by default pressing one of the 3 button's iluminates that button's LED)
 
+NOTE: OLED Support for CosmicController here: https://github.com/iqaudio/pyMOD-OLED
 
 
 ### ButtonPress.py - Reboot/halt button
