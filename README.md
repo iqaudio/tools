@@ -40,7 +40,7 @@ Control system via rotary encoder button press
 Supports 3 additional press buttons
 Supports 3 additional LEDs (by default pressing one of the 3 button's iluminates that button's LED)
 
-NOTE: OLED Support for CosmicController here: https://github.com/iqaudio/pyMOD-OLED
+NOTE: OLED Support for CosmicController here: https://github.com/StefanMavrodiev/pyMOD-OLED.git
 
 
 ### ButtonPress.py - Reboot/halt button
