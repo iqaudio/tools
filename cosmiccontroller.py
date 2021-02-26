@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #
-# $Id: cosmiccontroller.py,v 1.0 2017/10/15 17:53:00 Gordon Exp $
+# $Id: cosmiccontroller.py,v 1.0 2019/10/15 17:53:00 Gordon Exp $
 # (C) Copyright IQaudIO Limited, 2017
 
 # Use this code to read from the CosmicController's buttons (1/2/3 and rotary encoder)
